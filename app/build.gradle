@@ -3,12 +3,12 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 37
 
     defaultConfig {
         applicationId "com.ata.tempalarm1"
-        minSdk 29
-        targetSdk 32
+        minSdk 32
+        targetSdk 37
         versionCode 1
         versionName "1.0"
 
@@ -33,6 +33,7 @@ android {
             path 'src/main/jni/Android.mk'
         }
     }
+    namespace 'com.ata.tempalarm1'
 }
 
 dependencies {

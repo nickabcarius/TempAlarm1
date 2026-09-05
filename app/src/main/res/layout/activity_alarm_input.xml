@@ -11,14 +11,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
+        android:layout_marginTop="48dp"
+
         android:text="New Alarm"
         android:textSize="38dp"
-
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/saveToDB"
@@ -29,7 +28,7 @@
         android:text="save"
 
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="52dp"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="16dp"
         />
@@ -54,7 +53,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="56dp"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="104dp"
         />
 
     <TextView
@@ -67,7 +66,7 @@
         android:textSize="38dp"
 
         app:layout_constraintTop_toTopOf="@id/editTextTempSigned"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintStart_toEndOf="@id/editTextTempSigned"
         />
 
@@ -85,7 +84,7 @@
         app:layout_constraintEnd_toEndOf="parent"
 
         app:layout_constraintTop_toBottomOf="@id/editTextTempSigned"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="72dp"
 
         />
 
@@ -102,7 +101,7 @@
         app:layout_constraintEnd_toEndOf="parent"
 
         app:layout_constraintTop_toBottomOf="@id/H2CT"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="72dp"
         />
 
     <com.google.android.material.button.MaterialButtonToggleGroup
@@ -118,7 +117,7 @@
         app:layout_constraintEnd_toEndOf="parent"
 
         app:layout_constraintTop_toBottomOf="@id/H2CT2"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="72dp"
         />
     -->
 
@@ -153,7 +152,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editTextTempSigned"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="72dp"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
 
     <TextView
@@ -188,7 +187,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/H2CS"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="72dp"
         />
 
     <TextView
@@ -222,7 +221,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/H2CS2"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="72dp"
         />
 
     <TextView
