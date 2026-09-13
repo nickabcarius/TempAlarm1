@@ -50,6 +50,14 @@ public class AlarmInputActivity extends AppCompatActivity {
                 finish();//go back to main
             }
         });
+
+        binding.backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlarmInputActivity.super.finish();
+            }
+        });
+
     }
 
     @Override

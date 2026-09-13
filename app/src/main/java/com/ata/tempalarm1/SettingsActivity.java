@@ -2,6 +2,7 @@ package com.ata.tempalarm1;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -17,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ata.tempalarm1.databinding.ActivityMainBinding;
 import com.ata.tempalarm1.databinding.ActivitySettingsBinding;
+
+import java.io.Serializable;
 
 public class SettingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 ActivitySettingsBinding binding;
@@ -89,6 +92,12 @@ ActivitySettingsBinding binding;
 
             }
         });*/
+        binding.backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SettingsActivity.super.finish();
+            }
+        });
 
     }
     @Override

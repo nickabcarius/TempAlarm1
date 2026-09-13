@@ -5,6 +5,19 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/backButton"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/zipEditText"
+        app:srcCompat="@android:drawable/ic_menu_revert"
+        tools:ignore="RtlHardcoded" />
+
     <EditText
         android:id="@+id/zipEditText"
 

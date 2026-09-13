@@ -13,9 +13,8 @@ TODO:
  - Fix alignment on pages (close, need to fix purple bar)
  - Fix all colors in .xml files (should all point to the defined theme)
  - Make night mode stuff work (theme)
- - Test if alarm actaully works
+ - Test if alarm actually works
 
 TODO small tweaks:
- - navigation (back arrow) cannot work with latest andoid using navigation gestures. Will need a back button top of screen.
- - consider making the api key into onyl thing in a single file, then only gitignore that one file. (rather than having a function def in gitignore)
+ - consider making the api key into only thing in a single file, then only gitignore that one file. (rather than having a function def in gitignore)
  - consolidate .gitignore files (TempAlarm1\.idea\.gitignore, TempAlarm1\app\.gitignore, TempAlarm1\.gitignore)
