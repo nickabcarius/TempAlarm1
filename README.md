@@ -10,6 +10,7 @@ I hope to add warnings for emergencies and a Celsius option.
 TODO:
  - app not able to send the alarm when app is closed/not-open (may not be an issue any more, need to test)
  - zipcode on front page only updates up if we reload the app.
+ - print out last read temperature value "currTemp". (main page)
  - Test if alarm actually works
 
 TODO small tweaks:
