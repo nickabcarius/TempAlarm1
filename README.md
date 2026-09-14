@@ -8,11 +8,8 @@ The user can also set active times for the app stay alert and inactive times for
 I hope to add warnings for emergencies and a Celsius option.
 
 TODO:
- - app not able to send the alarm when app is closed/not-open (may not be an issue any more, need to test)
  - zipcode on front page only updates up if we reload the app.
  - print out last read temperature value "currTemp". (main page)
  - Test if alarm actually works
+ - app not able to send the alarm when app is closed/not-open (may not be an issue any more, need to test)
 
-TODO small tweaks:
- - consider making the api key into only thing in a single file, then only gitignore that one file. (rather than having a function def in gitignore)
- - consolidate .gitignore files (TempAlarm1\.idea\.gitignore, TempAlarm1\app\.gitignore, TempAlarm1\.gitignore)
