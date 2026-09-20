@@ -8,8 +8,7 @@ The user can also set active times for the app stay alert and inactive times for
 I hope to add warnings for emergencies and a Celsius option.
 
 TODO:
- - zipcode on front page only updates up if we reload the app.
  - print out last read temperature value "currTemp". (main page)
  - Test if alarm actually works
- - app not able to send the alarm when app is closed/not-open (may not be an issue any more, need to test)
+ - app not able to send the alarm when app is closed/not-open (may not be an issue anymore, need to test)
 

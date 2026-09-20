@@ -144,8 +144,7 @@ public class MainActivity extends AppCompatActivity {
 
         //setContentView(R.layout.activity_main);
 
-        SharedPreferences sharedPref = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-        binding.zipText.setText(Integer.toString(sharedPref.getInt("Zipcode",95928)));
+
         //code to update zipText on press of replaceZip
         binding.settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -264,6 +263,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume(){//an option
         super.onResume();
 
+        SharedPreferences sharedPref = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        binding.zipText.setText(Integer.toString(sharedPref.getInt("Zipcode",95928)));
 
         mainViewModel.getListOfAlarms().observe(this, alarms ->{
             binding.recyclerView.setAdapter(new MainAdapter(alarms,getApplicationContext()));
