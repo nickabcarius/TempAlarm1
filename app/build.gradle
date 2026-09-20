@@ -26,14 +26,14 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     buildFeatures{
-        viewBinding true
+        viewBinding = true
     }
     externalNativeBuild {
         ndkBuild {
             path 'src/main/jni/Android.mk'
         }
     }
-    namespace 'com.ata.tempalarm1'
+    namespace = 'com.ata.tempalarm1'
 }
 
 dependencies {
