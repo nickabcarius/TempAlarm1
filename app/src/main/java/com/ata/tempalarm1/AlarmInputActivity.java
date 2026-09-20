@@ -30,7 +30,8 @@ public class AlarmInputActivity extends AppCompatActivity {
 
         binding = ActivityAlarmInputBinding.inflate(getLayoutInflater());
 
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        //Put this in if not seeing status bar
+        // getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
         setContentView(binding.getRoot());
 
