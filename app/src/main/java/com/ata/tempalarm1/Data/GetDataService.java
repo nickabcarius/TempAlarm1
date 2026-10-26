@@ -7,7 +7,7 @@ import retrofit2.http.Query;
 
 public interface GetDataService {
     @GET("/current.json")
-    Call <WeatherInfo> getWeatherAtZipcode(@Header("X-RapidAPI-Key") String apiKey, @Query("q") String queryString);
+    Call <WeatherInfo> getWeatherAtZipcode(@Header("key") String apiKey, @Query("q") String queryString);
     //everytime getWeatherAtZipcode( is called, the apiKey is passed and made part of a header object
     //the query adds a ? to the queryString that holds the passed in zipcode
 

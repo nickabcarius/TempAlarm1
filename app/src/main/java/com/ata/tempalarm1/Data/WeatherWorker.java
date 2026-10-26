@@ -63,10 +63,13 @@ public class WeatherWorker extends Worker {
         super(context, workerParams);
 
     }
+    private final String WEATHWORK = "WeatherWorker";
 
     @NonNull
     @Override
     public Result doWork() {
+        Log.d(WEATHWORK, "Start doWork");
+
         GetDataService service = APIClient.getRetrofit().create(GetDataService.class);
 //        Database = Room.databaseBuilder(getApplicationContext(), MainDB.class, "userAlarms")
 //                .allowMainThreadQueries()
@@ -97,6 +100,7 @@ public class WeatherWorker extends Worker {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }*/
+            Log.d(WEATHWORK, "Setup API call with Zipcode");
             call[0] = service.getWeatherAtZipcode(getAPIKey(), Integer.toString(sharedPref.getInt("Zipcode", 95928)));
             /*try {
                 Thread.sleep(2);
@@ -133,6 +137,7 @@ public class WeatherWorker extends Worker {
                         Log.e("LocationGot", "Long: "+Double.toString(location.getLongitude()) );
 
 
+                        Log.d(WEATHWORK, "Setup API call with GPS");
                         call[0] = service.getWeatherAtZipcode(getAPIKey(), Double.toString(location.getLatitude()) + "," + Double.toString(location.getLongitude()));
                         //call[0] = service.getWeatherAtZipcode(getAPIKey(), "37.759, -122.403");
 
@@ -190,7 +195,10 @@ public class WeatherWorker extends Worker {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            Log.d(WEATHWORK, "API call");
             Response<WeatherInfo> response = call[0].execute();
+            Log.d(WEATHWORK, "API returned");
+            Log.d(WEATHWORK, response.toString());
             //UseGPS==false, second break, after:API success
             //UseGPS==true, third break, after:API success
             /*try {
@@ -198,18 +206,22 @@ public class WeatherWorker extends Worker {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }*/
-            Log.e("APICall", "APICall Success");
+            Log.i("APICall", "API call Success");
 
-            Log.e("LocationGot", "ZipIn: "+Integer.toString(sharedPref.getInt("Zipcode", 95928)) );
-            Log.e("LocationGot", "Town: "+response.body().getLocation().getName() );
-            Log.e("LocationGot", "Sample Time: "+response.body().getCurrent().getLastUpdated() );
-            Log.e("LocationGot", "" );
+            Log.i("LocationGot", "ZipIn: "+Integer.toString(sharedPref.getInt("Zipcode", 95928)) );
+            Log.i("LocationGot", "Town: "+response.body().getLocation().getName() );
+            Log.i("LocationGot", "Sample Time: "+response.body().getCurrent().getLastUpdated() );
+            Log.i("LocationGot", "" );
 
             if (response.isSuccessful() && response.body() != null && response.body().getCurrent().getTempF() != null){
                 Data output = new Data.Builder().putDouble("temperature",response.body().getCurrent().getTempF()).build();
 
                 //trying
-//                double currTemp = response.body().getCurrent().getTempF();
+                double currTemp = response.body().getCurrent().getTempF();
+
+                //save currTemp to sharedPref as "LastTemp"
+                sharedPref.edit().putString("LastTemp", Double.toString(currTemp)).apply();
+
 //                String alarmText = "";
 //                        //mainViewModel.compare(response.body().getCurrent().getTempF());//,weatherInfo.getCurrent().getLastUpdated());//runs compare of list vs current and returns notification string
 //
@@ -246,7 +258,7 @@ public class WeatherWorker extends Worker {
 //
 //                    alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), alarmIntent);
 //                }
-                //
+//                //
 
                 outputObservable.postValue(response.body());
 

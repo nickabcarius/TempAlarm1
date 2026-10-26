@@ -3,73 +3,56 @@ package com.ata.tempalarm1;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.room.Database;
-import androidx.room.Room;
 import androidx.work.BackoffPolicy;
 import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
 import android.Manifest;
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.RingtoneManager;
-import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.Toast;
 
-import com.ata.tempalarm1.Data.APIClient;
 import com.ata.tempalarm1.Data.Alarm;
-import com.ata.tempalarm1.Data.GetDataService;
-import com.ata.tempalarm1.Data.ListDAO;
-import com.ata.tempalarm1.Data.MainDB;
-import com.ata.tempalarm1.Data.WeatherInfo;
 import com.ata.tempalarm1.Data.WeatherWorker;
 import com.ata.tempalarm1.databinding.ActivityMainBinding;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private MainViewModel mainViewModel;
     private MainAdapter mainAdapter;
-
-
+    private final String MAINACT = "MainActivity";
 
     @Override //Overriding the AppCompactActivity which is the android class that has a function onCreate that represents the view lifecycle
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(MAINACT, "Start onCreate");
         super.onCreate(savedInstanceState);
 
         //creating a new view model, based on the MainViewModel class, and storing it in the variable mainViewModel
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);//passing the class
         mainViewModel.initializeDataBase(getApplicationContext());
 
+        Log.d(MAINACT, "This line prints v \".ata.tempalarm1 Invalid resource ID 0x00000000\"");
         binding = ActivityMainBinding.inflate(getLayoutInflater());
+        Log.d(MAINACT, "here");
         DividerItemDecoration drawBox = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
         drawBox.setDrawable(getApplicationContext().getResources().getDrawable(R.drawable.box));
         binding.recyclerView.addItemDecoration(drawBox);
@@ -181,10 +164,47 @@ public class MainActivity extends AppCompatActivity {
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d(MAINACT, "click");
                 Intent intent=new Intent(getApplicationContext(), AlarmInputActivity.class);
                 //startActivityForResult(intent,RESULT_OK);
                 startActivity(intent);
                 //startService(intent);
+            }
+        });
+
+        Handler handler = new Handler();
+        Runnable longPressTempCheck = new Runnable() {
+            @Override
+            public void run() {
+                // Execute code after 5 seconds hold
+                // This is the API call
+                // Then set the onscreen time
+                Log.d(MAINACT, "hold");
+                Constraints constraint = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();//set a constraint to be sure the device is connected to a network
+                Log.d(MAINACT, "onetimeworker spawn");
+                OneTimeWorkRequest onetimeWorkRequest = new OneTimeWorkRequest.Builder(WeatherWorker.class).addTag("MainActivity")
+                    .setConstraints(constraint).setBackoffCriteria(BackoffPolicy.LINEAR,//if something goes wrong in the api call, it automatically takes the difference in time and handles it by itself
+                            OneTimeWorkRequest.MIN_BACKOFF_MILLIS,TimeUnit.MILLISECONDS).build();
+                WorkManager mWorkManager = WorkManager.getInstance(getApplicationContext());//the instance of the WorkManager directly in the MainActivity instead of the ViewModel
+                WorkManager.getInstance(getApplicationContext()).enqueue(onetimeWorkRequest);
+                Log.d(MAINACT, "finsh onetimeworker spawn");
+            }
+        };
+        binding.fab.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Start the 5-second hold timer (5000 ms)
+                        handler.postDelayed(longPressTempCheck, 5000);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        // Cancel the timer if released early
+                        handler.removeCallbacks(longPressTempCheck);
+                        break;
+                }
+                return false; // Allow click events to proceed if needed
             }
         });
 
@@ -204,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             WorkInfo workInfo = listOfWorkInfo.get(0);//get first item of array list
-            Log.e("work manager", workInfo.getState().toString());
+            Log.i("work manager", workInfo.getState().toString());
             switch(workInfo.getState()){
                 case ENQUEUED:
                     break;
@@ -247,10 +267,12 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         });
+        Log.d(MAINACT, "End onCreate");
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(MAINACT, "Start onActivityResult");
 
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK){
@@ -258,14 +280,17 @@ public class MainActivity extends AppCompatActivity {
             mainAdapter.addItem(rAlarm);
             //binding.recyclerView.getAdapter().addItem();
         }
+        Log.d(MAINACT, "End onActivityResult");
     }
 
     @Override
     protected void onResume(){//an option
+        Log.d(MAINACT, "Start onResume");
         super.onResume();
 
         SharedPreferences sharedPref = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         binding.zipText.setText(Integer.toString(sharedPref.getInt("Zipcode",95928)));
+        binding.lastTempValue.setText(sharedPref.getString("LastTemp","?"));
 
         mainViewModel.getListOfAlarms().observe(this, alarms ->{
             binding.recyclerView.setAdapter(new MainAdapter(alarms,getApplicationContext()));
@@ -275,5 +300,6 @@ public class MainActivity extends AppCompatActivity {
         //    binding.recyclerView.getAdapter().notifyDataSetChanged();
         //}
 
+        Log.d(MAINACT, "End onResume");
     }
 }

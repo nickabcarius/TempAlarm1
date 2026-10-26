@@ -9,6 +9,8 @@ I hope to add warnings for emergencies and a Celsius option.
 
 TODO:
  - print out last read temperature value "currTemp". (main page)
+   - close on this.
+   - have worker starting, have api function calling, but NEED to pass in the API key correctly still.
+ - Fix Log.e calls to be accurately logged as info, waring or actaul error.
  - Test if alarm actually works
  - app not able to send the alarm when app is closed/not-open (may not be an issue anymore, need to test)
-
