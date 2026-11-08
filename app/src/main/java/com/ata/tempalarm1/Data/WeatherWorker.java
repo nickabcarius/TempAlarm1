@@ -70,6 +70,11 @@ public class WeatherWorker extends Worker {
     public Result doWork() {
         Log.d(WEATHWORK, "Start doWork");
 
+        if (getAPIKey() == null) {
+            Log.e(WEATHWORK, "API key is null");
+            return Result.failure();
+        }
+
         GetDataService service = APIClient.getRetrofit().create(GetDataService.class);
 //        Database = Room.databaseBuilder(getApplicationContext(), MainDB.class, "userAlarms")
 //                .allowMainThreadQueries()
@@ -93,7 +98,7 @@ public class WeatherWorker extends Worker {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }*/
-        Log.e("LocationGot", "UseGPS: "+sharedPref.getBoolean("UseGPS", false) );
+        Log.i("LocationGot", "UseGPS: "+sharedPref.getBoolean("UseGPS", false) );
         if (!sharedPref.getBoolean("UseGPS", false)) {
             /*try {
                 Thread.sleep(2);
@@ -133,8 +138,8 @@ public class WeatherWorker extends Worker {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }*/
-                        Log.e("LocationGot", "Lat: "+Double.toString(location.getLatitude()) );
-                        Log.e("LocationGot", "Long: "+Double.toString(location.getLongitude()) );
+                        Log.i("LocationGot", "Lat: "+Double.toString(location.getLatitude()) );
+                        Log.i("LocationGot", "Long: "+Double.toString(location.getLongitude()) );
 
 
                         Log.d(WEATHWORK, "Setup API call with GPS");
@@ -157,9 +162,9 @@ public class WeatherWorker extends Worker {
         try{
 
 
-            Log.e("CurrTime", "C: HHmm: "+ LocalDateTime.now().format(DateTimeFormatter.ofPattern("HHmm")) );
-            Log.e("CurrTime", "W: HHmm: "+ sharedPref.getInt("WakeTime",1000) );
-            Log.e("CurrTime", "S: HHmm: "+ sharedPref.getInt("SleepTime",2000) );
+            Log.i("CurrTime", "C: HHmm: "+ LocalDateTime.now().format(DateTimeFormatter.ofPattern("HHmm")) );
+            Log.i("CurrTime", "W: HHmm: "+ sharedPref.getInt("WakeTime",1000) );
+            Log.i("CurrTime", "S: HHmm: "+ sharedPref.getInt("SleepTime",2000) );
 
             int currTime= Integer.parseInt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HHmm")));
             int wakeTime= sharedPref.getInt("WakeTime",1000);
@@ -188,12 +193,16 @@ public class WeatherWorker extends Worker {
                 Thread.sleep( waitTime );
             }
 
-            Log.e("CurrTime", "P" );
-
-            try {
-                Thread.sleep(2048);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+//            Log.e("CurrTime", "P" );
+//
+//            try {
+//                Thread.sleep(2048);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+            if (call[0] == null) {
+                Log.e(WEATHWORK, "API call is null");
+                return Result.failure();
             }
             Log.d(WEATHWORK, "API call");
             Response<WeatherInfo> response = call[0].execute();
@@ -206,18 +215,21 @@ public class WeatherWorker extends Worker {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }*/
+            if (!response.isSuccessful()) {
+                Log.e("APICall", "API call Failed with code: " + response.code());
+                return Result.failure();
+            }
             Log.i("APICall", "API call Success");
-
-            Log.i("LocationGot", "ZipIn: "+Integer.toString(sharedPref.getInt("Zipcode", 95928)) );
-            Log.i("LocationGot", "Town: "+response.body().getLocation().getName() );
-            Log.i("LocationGot", "Sample Time: "+response.body().getCurrent().getLastUpdated() );
-            Log.i("LocationGot", "" );
+            Log.i("LocationGot", "ZipIn: "+Integer.toString(sharedPref.getInt("Zipcode", 95928)));
+            Log.i("LocationGot", "Town: "+response.body().getLocation().getName());
+            Log.i("LocationGot", "Sample Time: "+response.body().getCurrent().getLastUpdated());
 
             if (response.isSuccessful() && response.body() != null && response.body().getCurrent().getTempF() != null){
                 Data output = new Data.Builder().putDouble("temperature",response.body().getCurrent().getTempF()).build();
 
                 //trying
                 double currTemp = response.body().getCurrent().getTempF();
+                Log.i("LocationGot", "Temperature: "+currTemp);
 
                 //save currTemp to sharedPref as "LastTemp"
                 sharedPref.edit().putString("LastTemp", Double.toString(currTemp)).apply();

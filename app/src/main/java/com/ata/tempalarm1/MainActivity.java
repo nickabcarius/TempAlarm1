@@ -188,6 +188,9 @@ public class MainActivity extends AppCompatActivity {
                 WorkManager mWorkManager = WorkManager.getInstance(getApplicationContext());//the instance of the WorkManager directly in the MainActivity instead of the ViewModel
                 WorkManager.getInstance(getApplicationContext()).enqueue(onetimeWorkRequest);
                 Log.d(MAINACT, "finsh onetimeworker spawn");
+
+                SharedPreferences sharedPref = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                binding.lastTempValue.setText(sharedPref.getString("LastTemp", "?"));
             }
         };
         binding.fab.setOnTouchListener(new View.OnTouchListener() {
